@@ -32,6 +32,10 @@ router.get('/categories', (req, res) => {
     res.json({ categories: categories });
 })
 
+router.post('/post', (req, res) => {
+    res.json({ success: true });
+})
+
 router.route('/post/:postId')
     .get((req, res) => {
         res.json({ post: req.params })
@@ -42,6 +46,10 @@ router.route('/post/:postId')
     .delete((req, res) => {
         res.json({ success: true })
     })
+
+router.post('/category', (req, res) => {
+    res.json({ success: true })
+})
 
 router.route('/category/:categoryId')
     .get((req, res) => {
