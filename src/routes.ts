@@ -1,65 +1,29 @@
 import express from 'express';
+import PostController from './controllers/post.controller';
+import CategoryController from './controllers/category.controller';
 
 const router = express.Router();
 
-router.get('/posts', (req, res) => {
-    let posts: any = [
-        {
-            title: "Post 1",
-            content: "Lorem ipsum...",
-            createdAt: new Date(),
-            updatedAt: null
-        },
-        {
-            title: "Post 2",
-            content: "Lorem ipsum...",
-            createdAt: new Date(),
-            updatedAt: null
-        }
-    ];
-    res.json({ posts: posts });
-})
+// Find all
+router.get('/posts', PostController.findAll);
+router.get('/categories', CategoryController.findAll);
 
-router.get('/categories', (req, res) => {
-    let categories: any = [
-        {
-            name: "Catégorie 1"
-        }
-        {
-            name: "Catégorie 2"
-        }
-    ];
-    res.json({ categories: categories });
-})
+// Create a psot
+router.post('/post', PostController.create);
 
-router.post('/post', (req, res) => {
-    res.json({ success: true });
-})
-
+// Post CRUD
 router.route('/post/:postId')
-    .get((req, res) => {
-        res.json({ post: req.params })
-    })
-    .post((req, res) => {
-        res.json({ success: true })
-    })
-    .delete((req, res) => {
-        res.json({ success: true })
-    })
+    .get(PostController.read)
+    .post(PostController.update)
+    .delete(PostController.delete)
 
-router.post('/category', (req, res) => {
-    res.json({ success: true })
-})
+// Create a category
+router.post('/category', CategoryController.create);
 
+// Category CRUD
 router.route('/category/:categoryId')
-    .get((req, res) => {
-        res.json({ category: req.params })
-    })
-    .post((req, res) => {
-        res.json({ success: true })
-    })
-    .delete((req, res) => {
-        res.json({ success: true })
-    })
+    .get(CategoryController.read)
+    .post(CategoryController.update)
+    .delete(CategoryController.delete)
 
 export default router;
