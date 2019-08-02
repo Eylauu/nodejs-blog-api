@@ -1,3 +1,3 @@
 import Server from "./src/server";
 
-Server.start();
+Server.start(3000);
