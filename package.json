@@ -1,0 +1,29 @@
+{
+  "name": "nodejs_blog_api_rest",
+  "version": "1.0.0",
+  "description": "Une APIRest développée en NodeJS.",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "concurrently -k -n \"Typescript,Node\" -p \"[{name}]\" -c \"blue,green\" \"tsc --watch\" \"nodemon dist/index.js\"",
+    "start": "tsc && node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "NodeJS",
+    "APIRest",
+    "API",
+    "TypeScript",
+    "Blog"
+  ],
+  "author": "Alex Chesnay <contact@alex-chesnay.fr>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.9",
+    "concurrently": "^4.1.1",
+    "nodemon": "^1.19.1",
+    "typescript": "^3.5.3"
+  }
+}
