@@ -15,12 +15,12 @@ router.post('/categories', CategoryController.create);
 // CRUD
 router.route('/posts/:postId')
     .get(PostController.find)
-    .post(PostController.update)
+    .put(PostController.update)
     .delete(PostController.delete)
 
 router.route('/categories/:categoryId')
     .get(CategoryController.find)
-    .post(CategoryController.update)
+    .put(CategoryController.update)
     .delete(CategoryController.delete)
 
 // Export
