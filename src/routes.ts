@@ -5,25 +5,23 @@ import CategoryController from './controllers/category.controller';
 const router = express.Router();
 
 // Find all
-router.get('/posts', PostController.findAll);
-router.get('/categories', CategoryController.findAll);
+router.get('/posts', PostController.get);
+router.get('/categories', CategoryController.get);
 
-// Create a psot
-router.post('/post', PostController.create);
+// Create
+router.post('/posts', PostController.create);
+router.post('/categories', CategoryController.create);
 
-// Post CRUD
-router.route('/post/:postId')
-    .get(PostController.read)
+// CRUD
+router.route('/posts/:postId')
+    .get(PostController.find)
     .post(PostController.update)
     .delete(PostController.delete)
 
-// Create a category
-router.post('/category', CategoryController.create);
-
-// Category CRUD
-router.route('/category/:categoryId')
-    .get(CategoryController.read)
+router.route('/categories/:categoryId')
+    .get(CategoryController.find)
     .post(CategoryController.update)
     .delete(CategoryController.delete)
 
+// Export
 export default router;
