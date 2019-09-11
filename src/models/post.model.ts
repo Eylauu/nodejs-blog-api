@@ -4,5 +4,5 @@ export default mongoose.model('Post', new mongoose.Schema({
     title: String,
     content: String,
     createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: null }
+    updatedAt: { type: Date }
 }), 'posts');
