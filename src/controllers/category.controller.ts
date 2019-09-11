@@ -1,23 +1,11 @@
 import express from 'express';
+import CategoryModel from '../models/category.model'
 
 export default class CategoryController {
-    private static categories = [
-        {
-            id: 1,
-            name: "Technologies"
-        },
-        {
-            id: 2,
-            name: "Actualités"
-        },
-        {
-            id: 3,
-            name: "Internet"
-        }
-    ]
+    constructor(private categoryModel: typeof CategoryModel) { }
 
     public static get(req: express.Request, res: express.Response) {
-        res.json({ meta: { code: 200 }, categories: CategoryController.categories }).status(200);
+        res.json({ meta: { code: 200 }, categories: "" }).status(200);
     }
 
     public static create(req: express.Request, res: express.Response) {
