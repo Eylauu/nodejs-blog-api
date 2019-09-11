@@ -1,6 +1,7 @@
 import express from 'express';
 import router from './routes';
 import Database from './database';
+import bodyParser from 'body-parser';
 
 export default class Server {
     static start(port: number): void {
@@ -8,6 +9,9 @@ export default class Server {
 
         // Connexion à la base de données
         Database.instance.connection;
+
+        // Body Parser
+        app.use(bodyParser.json());
 
         // Routes
         app.use('/api', router);
