@@ -1,4 +1,4 @@
-import express from 'express';
+import { Request, Response } from 'express';
 import Category from '../models/category.model';
 import mongoose from 'mongoose';
 
@@ -8,7 +8,7 @@ export default class CategoryController {
      * @param req 
      * @param res 
      */
-    public static get(req: express.Request, res: express.Response) {
+    public static get(req: Request, res: Response): void {
         Category.find()
             .then(categories => res.status(200).send(categories))
             .catch(err => res.status(500).send(err));
@@ -19,7 +19,7 @@ export default class CategoryController {
      * @param req 
      * @param res 
      */
-    public static create(req: express.Request, res: express.Response) {
+    public static create(req: Request, res: Response): void {
         const categoryData = req.body;
         const category = new Category(categoryData);
 
@@ -33,7 +33,7 @@ export default class CategoryController {
      * @param req 
      * @param res 
      */
-    public static find(req: express.Request, res: express.Response) {
+    public static find(req: Request, res: Response): void {
         const { categoryId } = req.params;
 
         Category.findById(categoryId)
@@ -51,7 +51,7 @@ export default class CategoryController {
      * @param req 
      * @param res 
      */
-    public static update(req: express.Request, res: express.Response) {
+    public static update(req: Request, res: Response): void {
         const { categoryId } = req.params;
         const categoryData = req.body;
 
@@ -70,7 +70,7 @@ export default class CategoryController {
      * @param req 
      * @param res 
      */
-    public static delete(req: express.Request, res: express.Response) {
+    public static delete(req: Request, res: Response): void {
         const { categoryId } = req.params;
 
         Category.findByIdAndDelete(categoryId)

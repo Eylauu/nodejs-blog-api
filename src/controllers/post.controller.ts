@@ -1,5 +1,7 @@
-import express from 'express';
+import { Request, Response } from 'express';
 import Post from '../models/post.model';
+import User from '../models/user.model';
+import Category from '../models/category.model';
 import mongoose from 'mongoose';
 
 export default class PostController {
@@ -8,7 +10,7 @@ export default class PostController {
      * @param req 
      * @param res 
      */
-    public static get(req: express.Request, res: express.Response) {
+    public static get(req: Request, res: Response): void {
         Post.find()
             .then(posts => res.status(200).send(posts))
             .catch(err => res.status(500).send(err));
@@ -19,9 +21,9 @@ export default class PostController {
      * @param req 
      * @param res 
      */
-    public static create(req: express.Request, res: express.Response) {
+    public static create(req: Request, res: Response): void {
         const postData = req.body;
-        const post = new Post(postData);
+        let post = new Post(postData);
 
         post.save()
             .then(createdPost => res.status(201).send(createdPost))
@@ -33,7 +35,7 @@ export default class PostController {
      * @param req 
      * @param res 
      */
-    public static find(req: express.Request, res: express.Response) {
+    public static find(req: Request, res: Response): void {
         const { postId } = req.params;
 
         Post.findById(postId)
@@ -51,7 +53,7 @@ export default class PostController {
      * @param req 
      * @param res 
      */
-    public static update(req: express.Request, res: express.Response) {
+    public static update(req: Request, res: Response): void {
         const { postId } = req.params;
         const postData = req.body;
 
@@ -70,7 +72,7 @@ export default class PostController {
      * @param req 
      * @param res 
      */
-    public static delete(req: express.Request, res: express.Response) {
+    public static delete(req: Request, res: Response): void {
         const { postId } = req.params;
 
         Post.findByIdAndDelete(postId)
