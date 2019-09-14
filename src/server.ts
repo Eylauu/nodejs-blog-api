@@ -4,6 +4,10 @@ import Database from './database';
 import bodyParser from 'body-parser';
 
 export default class Server {
+    /**
+     * Lance le server
+     * @return void
+     */
     static start(port: number): void {
         const app = express();
 

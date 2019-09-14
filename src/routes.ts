@@ -1,9 +1,9 @@
-import express from 'express';
+import { Router } from 'express';
 import PostController from './controllers/post.controller';
 import CategoryController from './controllers/category.controller';
 import UserController from './controllers/user.controller';
 
-const router = express.Router();
+const router = Router();
 
 // Find all
 router.get('/posts', PostController.get);

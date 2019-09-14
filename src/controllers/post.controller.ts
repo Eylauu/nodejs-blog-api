@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
 import Post from '../models/post.model';
-import User from '../models/user.model';
-import Category from '../models/category.model';
 import mongoose from 'mongoose';
 
 export default class PostController {
