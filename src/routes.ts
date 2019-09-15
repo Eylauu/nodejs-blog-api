@@ -17,7 +17,7 @@ router.get('/users', JwtController.verifyToken, UserController.get);
 // Create
 router.post('/posts', JwtController.verifyToken, PostController.create);
 router.post('/categories', JwtController.verifyToken, CategoryController.create);
-router.post('/users', JwtController.verifyToken, UserController.create);
+router.post('/users', UserController.create);
 
 // CRUD
 router.route('/posts/:postId')

@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import * as mongoose from 'mongoose';
 import User from '../models/user.model';
 import * as jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcryptjs';
+
 import 'dotenv/config';
 
 export default class JwtController {
@@ -16,14 +18,17 @@ export default class JwtController {
         User.findOne({ email: req.body.email })
             .then((user: mongoose.Document | null) => {
                 if (user) {
-                    if (req.body.password === user.password) {
-                        jwt.sign({ _id: user._id }, <jwt.Secret>JwtController.jwt_passphrase, { expiresIn: "30m" }, (err: Error, token: string) => {
-                            if (err) console.log(`JWT ERROR: ${err}`);
-                            res.status(200).json({ token: token });
-                        });
-                    } else {
-                        res.status(404).json({ "error": 'Identifiant ou mot de passe incorrect.' })
-                    }
+                    bcrypt.compare(req.body.password, user.password)
+                        .then((isValid: boolean) => {
+                            if (isValid) {
+                                jwt.sign({ _id: user._id }, <jwt.Secret>JwtController.jwt_passphrase, { expiresIn: "30m" }, (err: Error, token: string) => {
+                                    if (err) console.log(`JWT ERROR: ${err}`);
+                                    res.status(200).json({ token: token });
+                                });
+                            } else {
+                                res.status(404).json({ "error": 'Identifiant ou mot de passe incorrect.' })
+                            }
+                        })
                 } else {
                     res.status(404).json({ "error": 'Identifiant ou mot de passe incorrect.' })
                 }

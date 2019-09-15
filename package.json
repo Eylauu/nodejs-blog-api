@@ -18,7 +18,9 @@
   "author": "Alex Chesnay <contact@alex-chesnay.fr>",
   "license": "MIT",
   "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^8.3.3",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import User from '../models/user.model';
 import mongoose from 'mongoose';
+import * as bcrypt from 'bcryptjs';
 
 export default class UserController {
     /**
@@ -19,13 +20,24 @@ export default class UserController {
      * @param req 
      * @param res 
      */
-    public static create(req: Request, res: Response): void {
+    public static create(req: Request, res: Response) {
         const userData = req.body;
-        const user = new User(userData);
 
-        user.save()
-            .then(createdUser => res.status(201).send(createdUser))
-            .catch(err => res.status(500).send(err));
+        if (userData.password === undefined) {
+            res.status(404).json({ "error": "Invalid credentials." });
+            return;
+        }
+        bcrypt.genSalt(10)
+            .then((salt: string) => {
+                bcrypt.hash(userData.password, salt)
+                    .then((hashPassword: string) => {
+                        userData.password = hashPassword;
+                        const user = new User(userData);
+                        user.save()
+                            .then(createdUser => res.status(201).send(createdUser))
+                            .catch(err => res.status(500).send(err));
+                    })
+            });
     }
 
     /**
