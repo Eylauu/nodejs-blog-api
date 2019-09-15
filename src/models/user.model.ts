@@ -1,9 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
 
 export default mongoose.model('User', new Schema({
-    username: String,
-    email: String,
-    password: String,
+    username: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
     role: { type: Array, default: ['ROLE_USER'] },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date },
