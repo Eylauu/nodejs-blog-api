@@ -2,34 +2,38 @@ import { Router } from 'express';
 import PostController from './controllers/post.controller';
 import CategoryController from './controllers/category.controller';
 import UserController from './controllers/user.controller';
+import JwtController from './controllers/jwt.controller';
 
 const router = Router();
 
+// Authentication
+router.post('/authentication_token', JwtController.authenticate);
+
 // Find all
-router.get('/posts', PostController.get);
-router.get('/categories', CategoryController.get);
-router.get('/users', UserController.get);
+router.get('/posts', JwtController.verifyToken, PostController.get);
+router.get('/categories', JwtController.verifyToken, CategoryController.get);
+router.get('/users', JwtController.verifyToken, UserController.get);
 
 // Create
-router.post('/posts', PostController.create);
-router.post('/categories', CategoryController.create);
-router.post('/users', UserController.create);
+router.post('/posts', JwtController.verifyToken, PostController.create);
+router.post('/categories', JwtController.verifyToken, CategoryController.create);
+router.post('/users', JwtController.verifyToken, UserController.create);
 
 // CRUD
 router.route('/posts/:postId')
-    .get(PostController.find)
-    .put(PostController.update)
-    .delete(PostController.delete)
+    .get(JwtController.verifyToken, PostController.find)
+    .put(JwtController.verifyToken, PostController.update)
+    .delete(JwtController.verifyToken, PostController.delete)
 
 router.route('/categories/:categoryId')
-    .get(CategoryController.find)
-    .put(CategoryController.update)
-    .delete(CategoryController.delete)
+    .get(JwtController.verifyToken, CategoryController.find)
+    .put(JwtController.verifyToken, CategoryController.update)
+    .delete(JwtController.verifyToken, CategoryController.delete)
 
 router.route('/users/:userId')
-    .get(UserController.find)
-    .put(UserController.update)
-    .delete(UserController.delete)
+    .get(JwtController.verifyToken, UserController.find)
+    .put(JwtController.verifyToken, UserController.update)
+    .delete(JwtController.verifyToken, UserController.delete)
 
 // Export
 export default router;
