@@ -6,6 +6,9 @@ Une api rest de blog développée en NodeJS.
 npm run install
 # installe les dépendances
 
+cp .env.example .env
+# créée le fichier environement à partir du fichier exemple
+
 npm run dev
 # lance le server
 ```
