@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Post from '../models/post.model';
 import mongoose from 'mongoose';
+import { CreateValidations, UpdateValidations } from '../validations/post.validation';
 
 export default class PostController {
     /**
@@ -19,13 +20,24 @@ export default class PostController {
      * @param req 
      * @param res 
      */
-    public static create(req: Request, res: Response): void {
+    public static create(req: Request, res: Response) {
         const postData = req.body;
-        let post = new Post(postData);
+        const { error } = UpdateValidations.validate(postData);
 
-        post.save()
-            .then(createdPost => res.status(201).send(createdPost))
-            .catch(err => res.status(500).send(err));
+        if (error) return res.status(400).json(error);
+
+        Post.findOne({ title: postData.title })
+            .then((post: mongoose.Document | null) => {
+                if (post) return res.status(400).json({ error: "Article déjà existant." });
+
+                const newPost = new Post(postData);
+                newPost.save()
+                    .then(createdPost => res.status(201).send(createdPost))
+                    .catch(err => res.status(500).send(err));
+            })
+            .catch(err => {
+                res.status(500).send(err);
+            })
     }
 
     /**
@@ -51,9 +63,12 @@ export default class PostController {
      * @param req 
      * @param res 
      */
-    public static update(req: Request, res: Response): void {
+    public static update(req: Request, res: Response) {
         const { postId } = req.params;
         const postData = req.body;
+        const { error } = UpdateValidations.validate(postData);
+
+        if (error) return res.status(400).json(error);
 
         Post.findByIdAndUpdate(postId, postData)
             .then(updatedPost => res.status(200).send(updatedPost))

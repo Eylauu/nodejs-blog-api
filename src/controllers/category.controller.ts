@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Category from '../models/category.model';
+import CategoryValidations from '../validations/category.validation';
 import mongoose from 'mongoose';
 
 export default class CategoryController {
@@ -19,13 +20,24 @@ export default class CategoryController {
      * @param req 
      * @param res 
      */
-    public static create(req: Request, res: Response): void {
+    public static create(req: Request, res: Response) {
         const categoryData = req.body;
-        const category = new Category(categoryData);
+        const { error } = CategoryValidations.validate(categoryData);
 
-        category.save()
-            .then(createdCategory => res.status(201).send(createdCategory))
-            .catch(err => res.status(500).send(err));
+        if (error) return res.status(400).json(error);
+
+        Category.findOne({ name: categoryData.name })
+            .then((category: mongoose.Document | null) => {
+                if (category) return res.status(400).json({ error: "Catégorie déjà existante." });
+
+                const newCategory = new Category(categoryData);
+                newCategory.save()
+                    .then(createdCategory => res.status(201).send(createdCategory))
+                    .catch(err => res.status(500).send(err));
+            })
+            .catch(err => {
+                res.status(500).send(err);
+            })
     }
 
     /**
@@ -40,9 +52,9 @@ export default class CategoryController {
             .then(category => res.status(200).send(category))
             .catch(err => {
                 if (err instanceof mongoose.Error.CastError) {
-                    res.status(404).json({ "error": 'Invalid category ID.' })
+                    res.status(404).json({ "error": 'Invalid category ID.' });
                 }
-                res.status(500).send(err)
+                res.status(500).send(err);
             });
     }
 
@@ -51,17 +63,20 @@ export default class CategoryController {
      * @param req 
      * @param res 
      */
-    public static update(req: Request, res: Response): void {
+    public static update(req: Request, res: Response) {
         const { categoryId } = req.params;
         const categoryData = req.body;
+        const { error } = CategoryValidations.validate(categoryData);
+
+        if (error) return res.status(400).json(error);
 
         Category.findByIdAndUpdate(categoryId, categoryData)
             .then(updatedCategory => res.status(200).send(updatedCategory))
             .catch(err => {
                 if (err instanceof mongoose.Error.CastError) {
-                    res.status(404).json({ "error": 'Invalid category ID.' })
+                    res.status(404).json({ "error": 'Invalid category ID.' });
                 }
-                res.status(500).send(err)
+                res.status(500).send(err);
             });
     }
 
@@ -77,9 +92,9 @@ export default class CategoryController {
             .then(deletedCategory => res.status(200).json({ "success": 'Category successfully deleted.' }))
             .catch(err => {
                 if (err instanceof mongoose.Error.CastError) {
-                    res.status(404).json({ "error": 'Invalid category ID.' })
+                    res.status(404).json({ "error": 'Invalid category ID.' });
                 }
-                res.status(500).send(err)
+                res.status(500).send(err);
             });
     }
 }
