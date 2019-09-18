@@ -3,25 +3,33 @@ import router from './routes';
 import Database from './database';
 
 export default class Server {
+    // Application express
+    private app: express.Application;
+
+    // Port HTTP (par défaut: 3000)
+    private readonly port: number;
+
+    constructor(port: number = 3000) {
+        this.app = express();
+        this.port = port;
+    }
+
     /**
      * Lance le server
      * @return void
      */
-    static start(port: number): void {
-        const app = express();
-
+    public start(): void {
         // Connexion à la base de données
         Database.instance.connection;
 
         // Parser
-        app.use(express.urlencoded({ extended: true }));
-        app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
+        this.app.use(express.json());
 
         // Routes
-        app.use('/api', router);
+        this.app.use('/api', router);
 
-        app.listen(port, () => {
-            console.log(`Server started at ${port}.`);
-        });
+        // Lancement du server
+        this.app.listen(this.port, () => console.log(`Server started at ${this.port}.`));
     }
 }
