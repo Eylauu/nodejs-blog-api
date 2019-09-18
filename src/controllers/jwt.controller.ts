@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import * as mongoose from 'mongoose';
-import User from '../models/user.model';
+import { User, UserInterface } from '../models/user.model';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
 
 import 'dotenv/config';
+import * as mongoose from 'mongoose';
 
 export default class JwtController {
     private static readonly jwt_passphrase: string | undefined = process.env.JWT_PASSPHRASE;
@@ -17,11 +17,12 @@ export default class JwtController {
     public static authenticate(req: Request, res: Response): void {
         User.findOne({ email: req.body.email })
             .then((user: mongoose.Document | null) => {
-                if (user) {
-                    bcrypt.compare(req.body.password, user.password)
+                const userI = <UserInterface>user;
+                if (userI) {
+                    bcrypt.compare(req.body.password, userI.password)
                         .then((isValid: boolean) => {
                             if (isValid) {
-                                jwt.sign({ _id: user._id }, <jwt.Secret>JwtController.jwt_passphrase, { expiresIn: "30m" }, (err: Error, token: string) => {
+                                jwt.sign({ _id: userI._id }, <jwt.Secret>JwtController.jwt_passphrase, { expiresIn: "30m" }, (err: Error, token: string) => {
                                     if (err) console.log(`JWT ERROR: ${err}`);
                                     res.status(200).json({ token: token });
                                 });
@@ -33,9 +34,7 @@ export default class JwtController {
                     res.status(404).json({ "error": 'Identifiant ou mot de passe incorrect.' })
                 }
             })
-            .catch(err => {
-                res.status(500).send(err)
-            });
+            .catch((err: any) => res.status(500).send(err));
     }
 
     /**

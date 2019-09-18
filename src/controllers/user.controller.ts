@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User from '../models/user.model';
+import { User } from '../models/user.model';
 import mongoose from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { SignupValidations, UpdateValidations } from '../validations/user.validation';

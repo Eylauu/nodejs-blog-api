@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
+import { PostInterface } from './post.model';
 
-export default mongoose.model('User', new Schema({
+export const User = mongoose.model('User', new Schema({
     username: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
@@ -11,3 +12,13 @@ export default mongoose.model('User', new Schema({
         { type: Schema.Types.ObjectId, ref: 'Post' }
     ]
 }), 'users');
+
+export interface UserInterface extends mongoose.Document {
+    username: string,
+    email: string,
+    password: string,
+    role: Array<string>,
+    createdAt: Date,
+    updatedAt: Date,
+    posts: PostInterface
+}

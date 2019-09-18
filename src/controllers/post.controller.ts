@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Post from '../models/post.model';
+import { Post } from '../models/post.model';
 import mongoose from 'mongoose';
 import { CreateValidations, UpdateValidations } from '../validations/post.validation';
 
@@ -22,7 +22,7 @@ export default class PostController {
      */
     public static create(req: Request, res: Response) {
         const postData = req.body;
-        const { error } = UpdateValidations.validate(postData);
+        const { error } = CreateValidations.validate(postData);
 
         if (error) return res.status(400).json(error);
 

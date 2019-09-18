@@ -1,6 +1,6 @@
 import * as Joi from '@hapi/joi';
 
-export const CreateValidations = {
+export const CreateValidations = Joi.object({
     title: Joi.string()
         .alphanum()
         .min(5)
@@ -10,7 +10,7 @@ export const CreateValidations = {
         .min(4)
         .max(10000)
         .required()
-};
+});
 
 export const UpdateValidations = Joi.object({
     title: Joi.string()
