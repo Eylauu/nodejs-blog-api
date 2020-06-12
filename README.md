@@ -3,7 +3,7 @@ Une api rest de blog développée en NodeJS.
 
 ## Installation
 ```
-npm run install
+npm install
 # installe les dépendances
 
 cp .env.example .env
